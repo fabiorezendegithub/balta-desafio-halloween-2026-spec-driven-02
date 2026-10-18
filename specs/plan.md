@@ -19,18 +19,16 @@ do projeto.
   reduzir erro de digitação em link lido em voz alta
 - D-04: unicidade do código garantida por índice único no banco, além da
   checagem no serviço, porque a checagem sozinha tem corrida
-- D-05: chave de gerenciamento da DC-03 armazenada como hash, nunca em texto puro
 
 ## Modelo de dados
 Link
-- Id, Code (único), TargetUrl, CreatedAtUtc, ExpiresAtUtc (nulo), AccessCount,
-  ManagementKeyHash
+- Id, Code (único), TargetUrl, CreatedAtUtc, ExpiresAtUtc (nulo; guarda 23:59:59 UTC do dia informado), AccessCount
 
 ## Contratos
-- POST /api/links entrada: targetUrl, code opcional, expiresAtUtc opcional
-- POST /api/links saída: shortUrl, code, managementKey
+- POST /api/links entrada: targetUrl, code opcional, expiresOn opcional (data no formato AAAA-MM-DD, em UTC; o link vale até 23:59:59 UTC desse dia)
+- POST /api/links saída: shortUrl, code
 - GET /{code} redireciona com 302, ou 404 se não existe, ou 410 se expirou
-- GET /api/links/{code}/stats exige header com a chave de gerenciamento
+- GET /api/links/{code}/stats devolve o total de acessos a qualquer pessoa que conheça o código, sem autenticação
 
 ## Riscos
 - Concorrência na criação de código próprio, mitigada por D-04
