@@ -19,6 +19,26 @@ do projeto.
   reduzir erro de digitação em link lido em voz alta
 - D-04: unicidade do código garantida por índice único no banco, além da
   checagem no serviço, porque a checagem sozinha tem corrida
+- D-05: alfabeto do código automático (RF-02, D-03) = A-Z sem I, L e O, mais
+  2 a 9 (31 caracteres). É um subconjunto de "A-Z e 1-9", então cumpre RF-02, e
+  remove caracteres confundíveis (I/1/l, O/0). O alfabeto do código próprio
+  continua sendo A-Z e 1-9 inteiro (RN-05)
+- D-06: critério de "publicamente acessível" (RN-02, pendência da spec): uma
+  requisição GET ao destino, seguindo redirecionamentos, é aceita somente se a
+  resposta final for 2xx. Qualquer outro status, erro de rede ou timeout recusa
+  o link (HTTP 400)
+- D-07: tempo limite da verificação de acessibilidade = 5 segundos (pendência
+  da spec)
+
+## Dependências
+Cada pacote novo precisa de justificativa (constituição, Arquitetura):
+- Microsoft.EntityFrameworkCore.Sqlite: provedor do EF Core para SQLite (D-01)
+- Microsoft.EntityFrameworkCore.Design: geração de migrações pelo `dotnet ef`.
+  Só é necessário em tempo de desenvolvimento
+- dotnet-ef (ferramenta global): executa as migrações; versão alinhada ao EF Core
+- Microsoft.AspNetCore.Mvc.Testing: sobe a API em memória nos testes de
+  integração, exigido pela constituição (todo endpoint tem teste de integração)
+- xUnit: framework de testes definido na constituição (Stack)
 
 ## Modelo de dados
 Link
